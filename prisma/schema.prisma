@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String    @id @unique @default(cuid())
+  name            String
+  createdAt       DateTime  @default(now())
+  displayName     String
+  chatColor       String
+  profileImageUrl String?
+  message         String
+  messages        Message[]
+  images          Image[]
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  content   String?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+}
+
+model Token {
+  clientId            String  @id
+  clientSecret        String
+  accessToken         String?
+  refreshToken        String?
+  obtainmentTimestamp BigInt? @default(0)
+  expiresIn           BigInt? @default(0)
+}
+
+model Image {
+  id     Int    @id @default(autoincrement())
+  prompt String
+  url    String
+  author User   @relation(fields: [userId], references: [id])
+  userId String
+}
