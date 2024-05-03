@@ -43,3 +43,30 @@ model Image {
   author User   @relation(fields: [userId], references: [id])
   userId String
 }
+
+model LedStrip {
+  id       Int          @id @default(autoincrement())
+  name     String?
+  patterns LedPattern[]
+  matrixCount Int @default(256)
+  ledCount Int @default(128)
+  matrixPin Int @default(13)
+  ledPin Int @default(12)
+  ledFreq BigInt @default(800000)
+  ledDma Int @default(10)
+  ledBrightness Int @default(90)
+  matrixBrightness Int @default(32)
+  ledInvert Boolean @default(false)
+  ledChannel Int @default(0)
+  matrixChannel Int @default(1)
+  stripType String @default("ws.W2811_STRIP_RGB")
+}
+
+model LedPattern {
+  id   Int    @id @default(autoincrement())
+  name String
+  args String?
+  code String
+  LedStrip   LedStrip? @relation(fields: [ledStripId], references: [id])
+  ledStripId Int?
+}

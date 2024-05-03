@@ -7,6 +7,7 @@
 	import { showScene, showChat } from '$lib/stores';
 	import { Button, Gallery } from 'flowbite-svelte';
    import {aiImages} from '$lib/stores'
+	import LedStrip from './LEDStrip.svelte';
 	
 </script>
 
@@ -21,8 +22,7 @@
       </div>
    </div>
    
-   <div class="  w-full flex-grow pt-1 px-10 fixed top-20 left-96" hidden={!$showScene}>
+   <div class="w-[1000px] pt-1 px-10 absolute top-20 left-[500px]" hidden={!$showScene}>
       <Scene />
    </div>
-
-</div>
+   </div>

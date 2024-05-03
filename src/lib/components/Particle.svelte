@@ -5,6 +5,7 @@
     import { RigidBody, AutoColliders, Attractor } from '@threlte/rapier';
 	import { writable } from 'svelte/store';
     export let src
+    export let i
    const material = new MeshStandardMaterial();
    $: if (src) {
     const loader = new TextureLoader();
@@ -17,10 +18,10 @@
             
             
     <AutoColliders restitution={1}>
-        <Attractor position={[0, 0, 0]} strength={Math.random()} />
         
-    <T.Mesh position={[0, 2, 0]} scale={1} {material}>
-        <T.SphereGeometry args={[Math.random()*1.5, 10,10]} />
+    <T.Mesh position={[Math.random() * 5, Math.random() * 10, Math.random() * 5]} scale={3} {material}>
+        <T.BoxGeometry args={[2, 2,0.25]} />
+        <Attractor strength={-.25} />
        
     </T.Mesh>
 

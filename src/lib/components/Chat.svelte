@@ -33,10 +33,10 @@
 	
 </script>
 <aside class="flex justify-between bg-purple-700 h-screen w-96">
-<ul class="font-mono">
+<ul class="font-mono flex-col">
 	{#if $messages}
 {#each $messages as message, i   (message)  }
-<li>
+<li in:fly={{x: 200, duration: 2000}} >
 <Message {message} user={$users.find((user) => user.id === message.authorId)}/>
 </li>
 {/each}
