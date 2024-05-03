@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T, Canvas, useLoader, watch, useThrelteUserContext, useTask } from '@threlte/core';
+	import { T, Canvas, useLoader, watch, useThrelteUserContext, useTask, useThrelte } from '@threlte/core';
 	import {
 		
 	Texture,
@@ -18,6 +18,7 @@
 	import { derived } from 'svelte/store';
     
 
+	const numParticles =20;
 	
 	
 	
@@ -26,8 +27,11 @@
 	
   
 	
-
+	onMount(() => {
+		
+	})
     beforeUpdate(() => {
+		
 		if(window){
 			
 			const clientWidth = window.innerWidth;
@@ -53,9 +57,9 @@
 	
 </script>
 
-<Canvas size={{ width: 1000, height: 720 }}  >
+
 	
-	<T.PerspectiveCamera position={[0, 2, 20]} fov={50} makeDefault>
+	<T.PerspectiveCamera position={[0, 2, 15]} fov={75} makeDefault>
 	
 	</T.PerspectiveCamera>
 
@@ -104,15 +108,15 @@
 
 		<RigidBody type="fixed" lockRotations lockTranslations>
 			<AutoColliders shape="cuboid" restitution={0.5}>
-				<Attractor position={[0, 1, 0]} strength={1} />
-				<Attractor position={[0, -1, 0]} strength={1} />
-				<Attractor position={[0, 0, 0]} strength={1} />
-				<Attractor position={[0, 0, -1]} strength={1} />
-				<Attractor position={[0, 0, 1]} strength={1} />
+				<Attractor position={[0, 1, 0]} strength={0.5} />
+				<Attractor position={[0, -1, 0]} strength={0.5} />
+				<Attractor position={[0, 0, 0]} strength={0.5} />
+				<Attractor position={[0, 0, -1]} strength={0.5} />
+				<Attractor position={[0, 0, 1]} strength={0.5} />
 				
-				<T.Mesh>
+				<T.Mesh position.y={-5}>
                     
-					<T.BoxGeometry args={[100, 1, 100]} position={[0, -5, 0]} />
+					<T.BoxGeometry args={[100, 10, 100]} position={[0, -5, 0]} />
 					<T.MeshStandardMaterial color="gray" transparent opacity={0} />
 				</T.Mesh>
 			</AutoColliders>
@@ -120,12 +124,16 @@
 	 {#if $aiImages.length > 0}
         {#each $aiImages as {src, alt} , i}
 		<T.Group position={[i*3- $aiImages.length/2, i, 0]}>
-		<Particle  {src} {i}/>
+		<Particle  {src} />
 		</T.Group>
 		
         
 {/each}
 {/if}
-
+<!-- {#each Array(numParticles).fill(0) as p, i}
+	<T.Group position={[i, i, 0]}>
+		<Particle  src={"https://tse1.mm.bing.net/th/id/OIG3.v.2HR6DrQzZYFL1nu4JJ?pid=ImgGn"} />
+	</T.Group>
+{/each} -->
 </World>
-</Canvas>
+s
