@@ -1,13 +1,33 @@
 <script lang="ts">
-    import type {User, Message} from '@prisma/client'
+	import type { User, Message } from '@prisma/client';
 	import { SidebarItem } from 'flowbite-svelte';
-	import { fly } from 'svelte/transition';
-    export let user : User = { id: '', name: '', displayName: '', profileImageUrl: '', chatColor: '', message: '', createdAt: new Date() }
-    export let message : Message = { id: 0, authorId: '', content: '', createdAt: new Date() }
-
+	import { fade, fly } from 'svelte/transition';
+	export let user: User = {
+		id: '',
+		name: '',
+		displayName: '',
+		profileImageUrl: '',
+		chatColor: '',
+		message: '',
+		createdAt: new Date()
+	};
+	export let message: Message = { id: 0, authorId: '', content: '', createdAt: new Date() };
 </script>
-<div class="flex h-10 w-auto  space-y-1 mb-6 p-2 text-white align-middle  text-xl text-wrap"  transition:fly={{delay:0, duration:600, x: -200}} >
-    <span><img src={user.profileImageUrl} class="w-8 h-8 rounded-full m-4" alt="Profile" /></span>
-    <span class='p-3 ' style="color:{user.chatColor}">{user.displayName}</span>
-    <span class="flex h-20 m-3 pt-3 text-md text-wrap">{@html message.content}</span>
+
+<div
+	style="font-size: 1em; background-color: {user.chatColor};"
+	class="w-auto content-center rounded-lg  p-2  shadow-md items-center"
+	transition:fade={{ duration: 1000 }}
+    >
+
+	<span class="flex">
+		<img src={user.profileImageUrl} alt={user.displayName} class="rounded-full w-5 h-5" />
+		<h1>{user.displayName}</h1>
+	</span>
+	<div
+		class="bg-black flex content-center w-full h-full text-white p-3 text-xl"
+		in:fly={{ duration: 1000, x: -200 }}
+	>
+		{@html message.content}
+	</div>
 </div>

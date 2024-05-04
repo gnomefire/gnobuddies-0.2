@@ -65,6 +65,7 @@
     "@types/express": "^4.17.21",
     "api-kick": "^1.0.1",
     "autoprefixer": "^10.4.19",
+    "colorjs.io": "^0.5.0",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -76,6 +77,7 @@
     "socket.io-client": "^4.7.5",
     "sveltekit-embed": "^0.0.12",
     "tailwindcss": "^3.4.3",
-    "three": "^0.159.0"
+    "three": "^0.159.0",
+    "webmidi": "^3.1.9"
   }
 }

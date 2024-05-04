@@ -10,7 +10,7 @@ const channelId =  534184808
 const fetcher = new EmoteFetcher( clientId, clientSecret);
 const parser = new EmoteParser(fetcher, {
     // Custom HTML format
-    template: '<img class="emote" alt="{name}" src="{link}">',
+    template: '<img class="emote h-1 w-1" alt="{name}" src="{link}">',
     // Match without :colons:
     match: /(\w+)+?/g
 });

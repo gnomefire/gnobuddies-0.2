@@ -40,3 +40,4 @@ socket.on('image url', (data) => {
 export const menuOpen = writable(false)
 export const showScene = writable(true)
 export const showChat = writable(true)
+export const battling = writable(false)
