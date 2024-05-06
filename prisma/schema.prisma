@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = "postgresql://postgres.azeoeufgwbeybvvtiudi:3jmIOPAtpR3j7VTz@aws-0-us-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+  directUrl = "postgresql://postgres.azeoeufgwbeybvvtiudi:3jmIOPAtpR3j7VTz@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
 }
 
 model User {
@@ -15,16 +16,16 @@ model User {
   chatColor       String
   profileImageUrl String?
   message         String
-  messages        Message[]
   images          Image[]
+  messages        Message[]
 }
 
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   content   String?
-  author    User     @relation(fields: [authorId], references: [id])
   authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Token {
@@ -40,33 +41,51 @@ model Image {
   id     Int    @id @default(autoincrement())
   prompt String
   url    String
-  author User   @relation(fields: [userId], references: [id])
   userId String
+  author User   @relation(fields: [userId], references: [id])
 }
 
 model LedStrip {
-  id       Int          @id @default(autoincrement())
-  name     String?
-  patterns LedPattern[]
-  matrixCount Int @default(256)
-  ledCount Int @default(128)
-  matrixPin Int @default(13)
-  ledPin Int @default(12)
-  ledFreq BigInt @default(800000)
-  ledDma Int @default(10)
-  ledBrightness Int @default(90)
-  matrixBrightness Int @default(32)
-  ledInvert Boolean @default(false)
-  ledChannel Int @default(0)
-  matrixChannel Int @default(1)
-  stripType String @default("ws.W2811_STRIP_RGB")
+  id               Int          @id @default(autoincrement())
+  name             String?
+  matrixCount      Int          @default(256)
+  ledCount         Int          @default(128)
+  matrixPin        Int          @default(13)
+  ledPin           Int          @default(12)
+  ledFreq          BigInt       @default(800000)
+  ledDma           Int          @default(10)
+  ledBrightness    Int          @default(90)
+  matrixBrightness Int          @default(32)
+  ledInvert        Boolean      @default(false)
+  ledChannel       Int          @default(0)
+  matrixChannel    Int          @default(1)
+  stripType        String       @default("ws.W2811_STRIP_RGB")
+  patterns         LedPattern[]
 }
 
 model LedPattern {
-  id   Int    @id @default(autoincrement())
-  name String
-  args String?
-  code String
-  LedStrip   LedStrip? @relation(fields: [ledStripId], references: [id])
+  id         Int       @id @default(autoincrement())
+  name       String
+  args       String?
+  code       String
   ledStripId Int?
+  LedStrip   LedStrip? @relation(fields: [ledStripId], references: [id])
+}
+
+model jQuestion {
+  id         Int       @id @default(autoincrement())
+  airDate    DateTime?
+  question   String
+  value      String?
+  answer     String
+  round      String
+  showNumber Int?
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id        Int         @id @default(autoincrement())
+  name      String?     @unique
+  questions jQuestion[]
 }

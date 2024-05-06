@@ -1,51 +1,45 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
+import {  getAllQuestions } from '../src/lib/trivia.ts';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-const tokenData = [
-  {
-    clientid :process.env.VITE_TWITCH_CLIENT_ID_1,
-    clientSecret: process.env.VITE_TWITCH_CLIENT_SECRET_1,
-    accesstoken : process.env.VITE_TWITCH_ACCESS_TOKEN_1,
-    refreshToken: process.env.VITE_TWITCH_REFRESH_TOKEN_1,
-    
-  }
-]
-const tokenData2 = [
-  {
-    clientid :process.env.VITE_TWITCH_CLIENT_ID_2,
-    clientSecret: process.env.VITE_TWITCH_CLIENT_SECRET_2,
-    accesstoken : process.env.VITE_TWITCH_ACCESS_TOKEN_2,
-    refreshToken: process.env.VITE_TWITCH_REFRESH_TOKEN_2,
-  }
-]
 async function main() {
-  tokenData.forEach(async (token) => {
-    await prisma.token.create(
-      {
-        data: {
-          clientId: token.clientid,
-          clientSecret: token.clientSecret,
-          accessToken: token.accesstoken,
-          refreshToken: token.refreshToken,
-        }
-      }
-    )
-  })
-  tokenData2.forEach(async (token) => {
-    await prisma.token.create(
-      {
-        data: {
-          clientId: token.clientid,
-          clientSecret: token.clientSecret,
-          accessToken: token.accesstoken,
-          refreshToken: token.refreshToken,
-        }
-      }
-    ) 
-  })
-}
+  const questions = await getAllQuestions().then((data) => data);
+  const categories = await prisma.category.findMany();
 
+  for (const question of questions) {
+    let category = categories.find((c) => c.name === question.category);
+    if (!category) {
+      category = await prisma.category.upsert({
+        where: { name: question.category },
+        update: {},
+        create: {
+          name: question.category,
+        }
+        
+        },
+      ).catch((e) => console.error(e));
+    }
+
+    await prisma.jQuestion.create({
+      data: {
+        category: {
+          connect: {
+            id: category.id,
+          },
+        },
+        airDate: question.airDate,
+        question: question.question,
+        answer: question.answer,
+        value: question.value,
+        round: question.round,
+        showNumber: Number(question.showNumber),
+
+        // Add other question data fields here
+      },
+    }).catch((e) => console.error(e))
+  }
+}
 
 main()
   .then(async () => {

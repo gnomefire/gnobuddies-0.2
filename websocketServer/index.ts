@@ -5,10 +5,9 @@ import {Bot, createBotCommand } from '@twurple/easy-bot';
 import { ApiClient } from '@twurple/api';
 import {fetchAndParseEmotes} from './../src/lib/emoteFetch';
 import { RefreshingAuthProvider } from '@twurple/auth';
-import prisma from '../src/lib/prisma';
-import { type Message, type User } from  '@prisma/client';
-import { VITE_TWITCH_CLIENT_ID_2 } from './../.svelte-kit/ambient.d';
-import { onMessage } from '../kickchat-client/src/handlers/onMessage';
+import {weatherData} from '../src/lib/weatherFetch';
+import prisma from '$lib/prisma';
+import { fetchWord } from '../src/lib/urbanDict';
 
 export let bot: Bot;
 export let api: ApiClient;
@@ -44,11 +43,14 @@ io.on('connection', (socket) => {
   socket.emit('eventFromServer', 'Hello, World')
 })
 
+
+
 io.on('connection', (socket) => {
-  socket.on('eventFromClient', (data) => {
+  socket.on('kickMessage', (data) => {
     console.log(data)
-    socket.emit('eventFromServer', data)
-  })
+    io.emit('chat message', data.toString())
+})
+  
 })
 // SvelteKit should handle everything else using Express middleware
 // https://github.com/sveltejs/kit/tree/master/packages/adapter-node#custom-server
@@ -59,19 +61,19 @@ console.log(`Listening on http://localhost:${port}`)
 
 Promise.all([
     prisma.token.findFirst({
-        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_1 },
+        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_2 },
         select: { accessToken: true }
     }),
     prisma.token.findFirst({
-        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_1 },
+        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_2 },
         select: { refreshToken: true }
     }),
     prisma.token.findFirst({
-        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_1},
+        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_2},
         select: { clientId: true }
     }),
     prisma.token.findFirst({
-        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_1 },
+        where: { clientId: process.env.VITE_TWITCH_CLIENT_ID_2 },
         select: { clientSecret: true }
     })
 ]).then(([accessTokenData, refreshTokenData, clientIdData, clientSecretData]) => {
@@ -171,26 +173,79 @@ Promise.all([
 
             ),
             createBotCommand('loadImages', async (params, {say, userDisplayName, userId}) => {
+                const imageCount = await prisma.image.count()
+                const skip = Math.floor(Math.random() * imageCount)
                 const images = await prisma.image.findMany({
                     where: {
                         userId: userId
                     },
+                    skip: skip,
                     take: 4,
+                    orderBy: {
+                        id: 'asc'
+                    }
                 }).then((data) => data)
                 say(`Here are ${images.length} images I generated for you, ${userDisplayName}. I hope you like them!`)
                 for (const image of images) {
                     say(image.url)
                     io.emit('image url', image.url)
                 }
-            })
+            }),
+            createBotCommand('weather', async (params, {say, userDisplayName, userId}) => {
+                try{
 
-        ]
+                    const weather = await weatherData(params.join(' ')).then((data) => {return data})
+                   queryAi(`Here is the weather for ${params.join(' ')}: ${weather.weather[0].description} with a temperature of ${weather.main.temp} degrees Kelvin.  Please repeat this in a human readable fashion as if you were a weather forecaster. Include both F and C temps. feel free to include emojis and recommendations. the current time is ${new Date()}. DO NOT EXPLAIN THE CONVERSION PROCESS.`).then((data)=>say(data))
+                } catch (e) {
+
+                    say(`Sorry, ${userDisplayName}. I couldn't find any weather data for ${params.join(' ')}.`)
+                }
+            }),
+            createBotCommand('trivia', async (params, {say, userDisplayName, userId}) => {
+                await prisma.jQuestion.findUnique({
+                    where: {
+                        id: Math.floor(Math.random()* await prisma.jQuestion.count())
+                    }
+                }).then(async (data) => {
+                    const category = await prisma.category.findUnique({
+                        where: {
+                            id: data?.categoryId
+                        }
+                    }).then((data) => {
+                        return data
+                    })
+                    const aiResponse = await queryAi(`Question: ${data?.question} Answer: ${data?.answer}  generate a multiple-choice question and return your response in json format`).then((data)=>data)
+                    
+                        console.log(JSON.parse(aiResponse.substring(7, aiResponse.length - 3)).catch((error)=>console.log(error)))
+                    
+                    bot.onMessage(async (e)=>{
+                        const startTime = Date.now()
+                        const endTime = startTime + 30000
+                        if(e.text.toLowerCase() === data?.answer.toLowerCase()){
+                            say(`${userDisplayName} is correct! The answer was ${data?.answer}`)
+                            }
+                            if(Date.now() > endTime){
+                                say(`Time's The answer was ${data?.answer}`)
+                            }
+                        }
+                        
+                
+                        )
+
+                        })
+                    }),
+                    createBotCommand('ud', async (params, {say}) => {
+                        await fetchWord(params.join(' ')).then((data)=>say(data.substring(0, 100)))
+                    })
+                
+                    ]
     })
     bot.join('gn0mefire').then(async() => {
-        console.log('Joined the channel')
-        const users = await prisma.user.findMany().then((data) => data.map((user) => user))
+        console.log('Joined #gn0mefire')
 
     })
+   
+
     api = new ApiClient({ authProvider: authProvider })
 
 
@@ -223,7 +278,7 @@ Promise.all([
                     name: e.userDisplayName,
                     displayName: e.userDisplayName,
                     profileImageUrl: profileImage,
-                    chatColor: chatColor?.toString(),
+                    chatColor: chatColor?.toString() || '#000000',
                     message:  parsedMessage.toString() ,
 
 

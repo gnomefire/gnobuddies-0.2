@@ -27,7 +27,7 @@
 			{#each $messages as message, i (message)}
 			{#if new Date().getSeconds() - new Date(message.createdAt).getSeconds() < 20 }
 				<li>
-					<SidebarGroup active={i === index} class="text-white text-wrap mr-20">
+					<SidebarGroup active={i === index} class="text-white text-wrap mr-20 w-96">
 						<Message {message} user={$users.find((user) => user.id === message.authorId)} />
 					</SidebarGroup>
 				</li>

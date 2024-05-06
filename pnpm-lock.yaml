@@ -50,6 +50,9 @@ dependencies:
   '@types/express':
     specifier: ^4.17.21
     version: 4.17.21
+  '@xstate/svelte':
+    specifier: ^3.0.3
+    version: 3.0.3(svelte@4.2.15)
   api-kick:
     specifier: ^1.0.1
     version: 1.0.1(typescript@5.4.5)
@@ -74,12 +77,18 @@ dependencies:
   kick.com-api:
     specifier: ^0.1.65
     version: 0.1.65(typescript@5.4.5)
+  masterchat:
+    specifier: ^1.1.0
+    version: 1.1.0
   obs-websocket-js:
     specifier: ^5.0.5
     version: 5.0.5
   postcss:
     specifier: ^8.4.38
     version: 8.4.38
+  prisma:
+    specifier: ^5.13.0
+    version: 5.13.0
   socket.io:
     specifier: ^4.7.5
     version: 4.7.5
@@ -151,9 +160,6 @@ devDependencies:
   prettier-plugin-svelte:
     specifier: ^3.1.2
     version: 3.2.3(prettier@3.2.5)(svelte@4.2.15)
-  prisma:
-    specifier: 5.13.0
-    version: 5.13.0
   svelte:
     specifier: ^4.2.7
     version: 4.2.15
@@ -905,9 +911,11 @@ packages:
 
   /@prisma/debug@5.13.0:
     resolution: {integrity: sha512-699iqlEvzyCj9ETrXhs8o8wQc/eVW+FigSsHpiskSFydhjVuwTJEfj/nIYqTaWFYuxiWQRfm3r01meuW97SZaQ==}
+    dev: false
 
   /@prisma/engines-version@5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b:
     resolution: {integrity: sha512-AyUuhahTINGn8auyqYdmxsN+qn0mw3eg+uhkp8zwknXYIqoT3bChG4RqNY/nfDkPvzWAPBa9mrDyBeOnWSgO6A==}
+    dev: false
 
   /@prisma/engines@5.13.0:
     resolution: {integrity: sha512-hIFLm4H1boj6CBZx55P4xKby9jgDTeDG0Jj3iXtwaaHmlD5JmiDkZhh8+DYWkTGchu+rRF36AVROLnk0oaqhHw==}
@@ -917,6 +925,7 @@ packages:
       '@prisma/engines-version': 5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
       '@prisma/fetch-engine': 5.13.0
       '@prisma/get-platform': 5.13.0
+    dev: false
 
   /@prisma/fetch-engine@5.13.0:
     resolution: {integrity: sha512-Yh4W+t6YKyqgcSEB3odBXt7QyVSm0OQlBSldQF2SNXtmOgMX8D7PF/fvH6E6qBCpjB/yeJLy/FfwfFijoHI6sA==}
@@ -924,11 +933,13 @@ packages:
       '@prisma/debug': 5.13.0
       '@prisma/engines-version': 5.13.0-23.b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
       '@prisma/get-platform': 5.13.0
+    dev: false
 
   /@prisma/get-platform@5.13.0:
     resolution: {integrity: sha512-B/WrQwYTzwr7qCLifQzYOmQhZcFmIFhR81xC45gweInSUn2hTEbfKUPd2keAog+y5WI5xLAFNJ3wkXplvSVkSw==}
     dependencies:
       '@prisma/debug': 5.13.0
+    dev: false
 
   /@puppeteer/browsers@1.4.6(typescript@5.4.5):
     resolution: {integrity: sha512-x4BEjr2SjOPowNeiguzjozQbsc6h437ovD/wu+JpaenxVLm3jkgzHY2xOslMTp50HoTvQreMjiexiGQw1sqZlQ==}
@@ -1725,6 +1736,18 @@ packages:
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dev: false
 
+  /@xstate/svelte@3.0.3(svelte@4.2.15):
+    resolution: {integrity: sha512-PS/aFLRyrA+ESt+DsmRqpe7n6Zukcqvl+BEVLpWpGqRMHbymBbPR2RR3RnGF4MlM7YkFbme60obJtS6BYILUrQ==}
+    peerDependencies:
+      svelte: ^3.24.1 || ^4
+      xstate: ^5.11.0
+    peerDependenciesMeta:
+      xstate:
+        optional: true
+    dependencies:
+      svelte: 4.2.15
+    dev: false
+
   /@yr/monotone-cubic-spline@1.0.3:
     resolution: {integrity: sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==}
     dev: true
@@ -1888,6 +1911,15 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
+    dev: false
+
+  /axios@0.27.2(debug@4.3.4):
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.4)
+      form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /axios@1.6.8(debug@4.3.4):
@@ -2081,6 +2113,10 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  /charenc@0.0.2:
+    resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
+    dev: false
 
   /check-error@1.0.3:
     resolution: {integrity: sha512-iKEoDYaRmd1mxM90a2OEfWhjsjPpYPuQ+lMYsoxB126+t8fw7ySEO48nmDg5COTjxDI65/Y2OWpeEHk3ZOe8zg==}
@@ -2300,6 +2336,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypt@0.0.2:
+    resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+    dev: false
 
   /crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
@@ -3457,6 +3497,11 @@ packages:
       ws: 8.16.0
     dev: false
 
+  /iterator-helpers-polyfill@2.3.3:
+    resolution: {integrity: sha512-hStP36YeAkwkzQ3cvse12rl+NeTWGQNmdIqDoApxxWwVeJ2jDzgD0/nKQgf6tNoXx9bYWCdRmJnnABINq7cPew==}
+    engines: {chrome: '>=63', firefox: '>=57', node: '>=10.0.0', safari: '>=11'}
+    dev: false
+
   /jackspeak@2.3.6:
     resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
     engines: {node: '>=14'}
@@ -3663,6 +3708,18 @@ packages:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /masterchat@1.1.0:
+    resolution: {integrity: sha512-py9Z+nC7yeWkTQp9UHRl9/n7mGUZu2GKEyhX0j57Wiob+pb+TuAlFWhrhxzzgQKKVh/ET/OrXSEqNtV3JAcw3A==}
+    engines: {node: '>= 16.6'}
+    dependencies:
+      axios: 0.27.2(debug@4.3.4)
+      debug: 4.3.4
+      iterator-helpers-polyfill: 2.3.3
+      sha1: 1.1.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
@@ -4262,6 +4319,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 5.13.0
+    dev: false
 
   /progress@2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
@@ -4611,6 +4669,13 @@ packages:
 
   /setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
+    dev: false
+
+  /sha1@1.1.1:
+    resolution: {integrity: sha512-dZBS6OrMjtgVkopB1Gmo4RQCDKiZsqcpAQpkV/aaj+FCrCg8r4I4qMkDPQjBgLIxlmu9k4nUbWq6ohXahOneYA==}
+    dependencies:
+      charenc: 0.0.2
+      crypt: 0.0.2
     dev: false
 
   /shebang-command@2.0.0:

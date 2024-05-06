@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma'
-import { getAllUsers } from '../../websocketServer/util';
-import * as questionData from 'data/JEOPARDY_QUESTIONS1.json'
+
+import * as questionData from './data/JEOPARDY_QUESTIONS1.json';
 export const randomQuestion = async () => {
     const numQuestions = await prisma.jQuestion.count()
     const skip = Math.floor(Math.random() * numQuestions)        
@@ -14,12 +14,13 @@ export const randomQuestion = async () => {
 export const getAllQuestions = async () => {
     const questions = await questionData.default.map((question) => {
         return {
+            category: question.category,
+            airDate: new Date(question.air_date),
             question: question.question,
             answer: question.answer,
             value: question.value,
-            categoryName: question.category,
             round: question.round,
-            airDate: new Date(question.air_date),
+            showNumber: question.show_number
 
         }
     })
@@ -27,9 +28,11 @@ export const getAllQuestions = async () => {
     
 }
 export const getAllCategories = async () => {
-
-   
+    const categories = await questionData.default.map((question) => {
+        return question.category
+    })
+    return categories.filter((value, index, self) => self.indexOf(value) === index)
 
    
 }
-getAllQuestions().then(console.log)
+

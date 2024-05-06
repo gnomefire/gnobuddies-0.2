@@ -15,7 +15,7 @@
 </script>
 
 <div
-	style="font-size: 1em; background-color: {user.chatColor};"
+	style="background-color: {user.chatColor};"
 	class="w-auto content-center rounded-lg  p-2  shadow-md items-center"
 	transition:fade={{ duration: 1000 }}
     >
@@ -25,7 +25,7 @@
 		<h1>{user.displayName}</h1>
 	</span>
 	<div
-		class="bg-black flex content-center w-full h-full text-white p-3 text-xl"
+		class="bg-black flex content-center w-full h-full text-white p-3"
 		in:fly={{ duration: 1000, x: -200 }}
 	>
 		{@html message.content}
